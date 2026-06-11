@@ -1,0 +1,24 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment files
+.env
+
+# SQLite databases (chat history, checkpoints, etc.)
+*.db
+*.db-shm
+*.db-wal
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Editor/OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
