@@ -100,130 +100,26 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom premium CSS injection
+# Custom clean CSS injection for reasoning process blocks
 st.markdown("""
 <style>
-    /* Google Font Import */
-    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&family=Outfit:wght@100..900&display=swap');
-    
-    /* Main body background gradient */
-    .stApp {
-        background: radial-gradient(circle at top right, #17103a 0%, #090815 60%, #030207 100%) !important;
-        color: #e2e8f0 !important;
-        font-family: 'Outfit', sans-serif !important;
-    }
-    
-    /* Title styling */
-    .glow-title {
-        font-size: 3rem;
-        font-weight: 800;
-        background: linear-gradient(135deg, #a78bfa 0%, #3b82f6 50%, #10b981 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 0 40px rgba(139, 92, 246, 0.15);
-        margin-bottom: 0.1rem;
-    }
-    
-    .glow-subtitle {
-        color: #94a3b8;
-        font-size: 1.1rem;
-        margin-bottom: 2rem;
-    }
-
-    /* Sidebar Glassmorphism */
-    section[data-testid="stSidebar"] {
-        background-color: rgba(9, 8, 22, 0.95) !important;
-        border-right: 1px solid rgba(139, 92, 246, 0.15) !important;
-        backdrop-filter: blur(15px) !important;
-    }
-    
-    section[data-testid="stSidebar"] .stMarkdown h2 {
-        color: #a78bfa !important;
-    }
-
-    /* Custom styles for chat messages */
-    div[data-testid="stChatMessage"] {
-        background-color: rgba(255, 255, 255, 0.02) !important;
-        border: 1px solid rgba(255, 255, 255, 0.04) !important;
-        border-radius: 16px !important;
-        padding: 1.2rem !important;
-        margin-bottom: 1rem !important;
-        backdrop-filter: blur(8px) !important;
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
-        transition: transform 0.2s ease, border-color 0.2s ease;
-    }
-
-    div[data-testid="stChatMessage"]:hover {
-        border-color: rgba(139, 92, 246, 0.15) !important;
-    }
-
-    /* User messages specifically - violet gradient background */
-    div[data-testid="stChatMessage"]:has(div[data-testid="stChatMessageAvatar"] img[alt="user"]) {
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%) !important;
-        border: 1px solid rgba(139, 92, 246, 0.25) !important;
-        box-shadow: 0 4px 20px rgba(139, 92, 246, 0.05) !important;
-    }
-
-    /* Input area customization */
-    div[data-testid="stChatInput"] {
-        border-radius: 12px !important;
-        background-color: rgba(15, 14, 30, 0.8) !important;
-        border: 1px solid rgba(139, 92, 246, 0.2) !important;
-        box-shadow: 0 0 20px rgba(139, 92, 246, 0.05) !important;
-    }
-
-    div[data-testid="stChatInput"] textarea {
-        color: #e2e8f0 !important;
-    }
-
-    /* Expander / Thinking block formatting */
-    .stExpander {
-        border: 1px solid rgba(59, 130, 246, 0.25) !important;
-        background-color: rgba(15, 23, 42, 0.5) !important;
-        border-radius: 10px !important;
-        margin-bottom: 1rem;
-    }
-
-    .stExpander div[data-testid="stExpanderHeader"] {
-        background-color: transparent !important;
-        color: #60a5fa !important;
-        font-weight: 600 !important;
-    }
-
-    /* Thinking code block styles */
     .thinking-box {
-        font-family: 'JetBrains Mono', monospace;
-        color: #93c5fd;
-        border-left: 3px solid #3b82f6;
-        padding-left: 1rem;
+        font-family: monospace;
+        color: #555555;
+        border-left: 2px solid #999999;
+        padding-left: 0.8rem;
         font-size: 0.9rem;
-        background-color: rgba(30, 41, 59, 0.3);
-        padding: 0.8rem;
-        border-radius: 6px;
+        background-color: #f8f9fa;
+        padding: 0.6rem;
+        border-radius: 4px;
         white-space: pre-wrap;
     }
-
-    /* Suggested prompt cards */
-    .suggestion-container {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
-        margin-top: 1.5rem;
-    }
-    
-    .suggestion-card {
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        padding: 1rem;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-    
-    .suggestion-card:hover {
-        background: rgba(139, 92, 246, 0.05);
-        border-color: rgba(139, 92, 246, 0.2);
-        transform: translateY(-2px);
+    @media (prefers-color-scheme: dark) {
+        .thinking-box {
+            color: #c0c0c0;
+            border-left: 2px solid #555555;
+            background-color: #1e1e1e;
+        }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -353,13 +249,8 @@ st.sidebar.subheader("📄 Document Q&A (RAG)")
 
 # If document is loaded, display status and removal option
 if st.session_state.retriever is not None:
-    st.sidebar.markdown(f"""
-    <div style='padding: 1rem; background: rgba(16, 185, 129, 0.05); border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2); font-size: 0.85rem; margin-bottom: 0.5rem;'>
-        <strong style='color: #10b981;'>🟢 Document Indexed</strong><br>
-        <span style='color: #94a3b8; font-size: 0.8rem; word-break: break-all;'>File: {st.session_state.uploaded_filename}</span>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.sidebar.button("🗑️ Remove Document", use_container_width=True):
+    st.sidebar.success(f"\U0001F7E2 **Document Indexed**\n\nFile: {st.session_state.uploaded_filename}")
+    if st.sidebar.button("\U0001F5D1\uFE0F Remove Document", use_container_width=True):
         st.session_state.retriever = None
         st.session_state.uploaded_filename = ""
         st.success("Document removed!")
@@ -421,7 +312,7 @@ else:
                     res_dict = ingestion_chain.invoke(text)
                     st.session_state.retriever = res_dict["retriever"]
                     st.session_state.uploaded_filename = filename
-                    st.sidebar.success("🟢 Document indexed successfully!")
+                    st.sidebar.success("\U0001F7E2 Document indexed successfully!")
                     st.rerun()
             except Exception as e:
                 st.sidebar.error(f"Indexing error: {e}")
@@ -430,44 +321,21 @@ st.sidebar.markdown("---")
 
 # LangSmith Observability Indicator
 if cfg.LANGCHAIN_TRACING_V2 and cfg.LANGCHAIN_API_KEY:
-    st.sidebar.markdown(f"""
-    <div style='margin-top: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.05); border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2); font-size: 0.85rem;'>
-        <div style='display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;'>
-            <strong style='color: #10b981;'>🕵️‍♂️ LangSmith Tracing</strong>
-            <span style='background-color: #10b981; color: #090815; padding: 0.1rem 0.4rem; border-radius: 4px; font-weight: bold; font-size: 0.75rem;'>ACTIVE</span>
-        </div>
-        <div style='color: #94a3b8; margin-bottom: 0.5rem;'>
-            Project: <code style='color: #a78bfa; background: transparent; padding: 0;'>{cfg.LANGCHAIN_PROJECT}</code>
-        </div>
-        <a href="https://smith.langchain.com/" target="_blank" style='color: #3b82f6; text-decoration: none; font-weight: 500;'>Go to Console ↗</a>
-    </div>
-    """, unsafe_allow_html=True)
+    st.sidebar.info(f"🕵️‍♂️ **LangSmith Tracing: ACTIVE**\n\nProject: `{cfg.LANGCHAIN_PROJECT}`\n\n[Go to Console ↗](https://smith.langchain.com/)")
 else:
-    st.sidebar.markdown("""
-    <div style='margin-top: 1rem; padding: 1rem; background: rgba(255, 255, 255, 0.02); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05); font-size: 0.85rem;'>
-        <div style='display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;'>
-            <strong style='color: #64748b;'>🕵️‍♂️ LangSmith Tracing</strong>
-            <span style='background-color: #334155; color: #94a3b8; padding: 0.1rem 0.4rem; border-radius: 4px; font-weight: bold; font-size: 0.75rem;'>INACTIVE</span>
-        </div>
-        <div style='color: #64748b;'>
-            Enable tracing by setting <code>LANGCHAIN_TRACING_V2=true</code> in your environment or <code>.env</code> file.
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.sidebar.warning("🕵️‍♂️ **LangSmith Tracing: INACTIVE**\n\nEnable tracing by setting `LANGCHAIN_TRACING_V2=true` in your environment or secrets.")
 
 st.sidebar.markdown("""
-<div style='margin-top: 2rem; padding: 1rem; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; color: #64748b;'>
-    <strong>Model Specs: Gemma 4 E2B</strong><br>
-    • Activates 2B params dynamically<br>
-    • Multimodal & Audio native<br>
-    • 128K context length<br>
-    • Runs on HF Serverless Inference API
-</div>
-""", unsafe_allow_html=True)
+### 📋 Model Specs: Gemma 4 E2B
+- Activates 2B params dynamically
+- Multimodal & Audio native
+- 128K context length
+- Runs on HF Serverless Inference API
+""")
 
 # Main UI setup
-st.markdown("<h1 class='glow-title'>🔮 Gemma 4 Chat Companion</h1>", unsafe_allow_html=True)
-st.markdown("<p class='glow-subtitle'>Stateful AI Chatbot orchestrated by LangGraph & Hugging Face</p>", unsafe_allow_html=True)
+st.title("\U0001F52E Gemma 4 Chat Companion")
+st.caption("Stateful AI Chatbot orchestrated by LangGraph & Hugging Face")
 
 # Fetch conversation history from LangGraph checkpointer
 config = {"configurable": {"thread_id": st.session_state.session_id}}
