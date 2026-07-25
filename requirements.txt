@@ -16,3 +16,4 @@ PyMuPDF>=1.22.0
 faiss-cpu>=1.7.4
 sentence-transformers>=2.2.2
 langgraph-checkpoint-sqlite>=2.0.0
+torchvision
