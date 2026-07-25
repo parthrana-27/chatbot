@@ -14,10 +14,29 @@ from langchain_community.tools import DuckDuckGoSearchRun
 
 load_dotenv()
 
+# Retrieve Hugging Face API Token (prioritizing Streamlit secrets, falling back to env)
+hf_token = ""
+try:
+    import streamlit as st
+    if "HUGGINGFACEHUB_API_TOKEN" in st.secrets:
+        hf_token = st.secrets["HUGGINGFACEHUB_API_TOKEN"].strip()
+except Exception:
+    pass
+
+if not hf_token:
+    hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN", "").strip()
+
+if not hf_token:
+    raise ValueError(
+        "Hugging Face API Token is missing! Please configure HUGGINGFACEHUB_API_TOKEN "
+        "in your Streamlit Cloud Secrets settings (Advanced settings -> Secrets) "
+        "or in your local .env file."
+    )
+
 llm = ChatOpenAI(
     model="Qwen/Qwen2.5-72B-Instruct",
     base_url="https://router.huggingface.co/v1",
-    api_key=os.getenv("HUGGINGFACEHUB_API_TOKEN", "").strip(),
+    api_key=hf_token,
     temperature=0.7,
     streaming=True,
 )

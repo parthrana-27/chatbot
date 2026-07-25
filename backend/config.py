@@ -5,7 +5,16 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Hugging Face token configuration
-HUGGINGFACEHUB_API_TOKEN = os.getenv("HUGGINGFACEHUB_API_TOKEN", "")
+HUGGINGFACEHUB_API_TOKEN = ""
+try:
+    import streamlit as st
+    if "HUGGINGFACEHUB_API_TOKEN" in st.secrets:
+        HUGGINGFACEHUB_API_TOKEN = st.secrets["HUGGINGFACEHUB_API_TOKEN"].strip()
+except Exception:
+    pass
+
+if not HUGGINGFACEHUB_API_TOKEN:
+    HUGGINGFACEHUB_API_TOKEN = os.getenv("HUGGINGFACEHUB_API_TOKEN", "")
 
 # Default model settings
 DEFAULT_MODEL = "google/gemma-4-E2B-it"
@@ -23,9 +32,16 @@ LANGCHAIN_PROJECT = os.getenv("LANGCHAIN_PROJECT", "chatbot-observability")
 def get_hf_token(override_token: str = "") -> str:
     """
     Returns the Hugging Face token, prioritizing user override (from UI)
-    and falling back to the environment variable.
+    and falling back to streamlit secrets or the environment variable.
     """
     token = override_token.strip() if override_token else ""
+    if not token:
+        try:
+            import streamlit as st
+            if "HUGGINGFACEHUB_API_TOKEN" in st.secrets:
+                token = st.secrets["HUGGINGFACEHUB_API_TOKEN"].strip()
+        except Exception:
+            pass
     if not token:
         token = os.getenv("HUGGINGFACEHUB_API_TOKEN", "").strip()
     return token

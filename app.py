@@ -285,8 +285,16 @@ if "retriever" not in st.session_state:
 if "uploaded_filename" not in st.session_state:
     st.session_state.uploaded_filename = ""
 
-# Token retrieval (Load from .env file or environment variable)
-st.session_state.hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN", "").strip()
+# Token retrieval (Load from Streamlit Secrets or .env file/environment variable)
+hf_token = ""
+try:
+    if "HUGGINGFACEHUB_API_TOKEN" in st.secrets:
+        hf_token = st.secrets["HUGGINGFACEHUB_API_TOKEN"].strip()
+except Exception:
+    pass
+if not hf_token:
+    hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN", "").strip()
+st.session_state.hf_token = hf_token
 
 # Hidden configurations (hardcoded parameters)
 selected_model = "google/gemma-4-E2B-it"
@@ -532,7 +540,7 @@ if prompt_input:
 if user_input:
     # Check for token availability
     if not st.session_state.hf_token:
-        st.error("❌ A Hugging Face API token is required. Please configure HUGGINGFACEHUB_API_TOKEN in your .env file.")
+        st.error("❌ A Hugging Face API token is required. Please configure HUGGINGFACEHUB_API_TOKEN in your .env file or Streamlit Secrets.")
     else:
         # Render user message
         with st.chat_message("user"):
