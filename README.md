@@ -635,8 +635,23 @@ LANGCHAIN_PROJECT = "chatbot-observability"
 
 ---
 
+## 🔄 Jenkins CI/CD Pipeline
+
+This project includes a fully automated **Jenkins CI/CD Declarative Pipeline** (`Jenkinsfile`) optimized for Dockerized Jenkins installations:
+
+### Pipeline Stages:
+1. **Checkout Code**: SCM checkout.
+2. **Setup Python & Dependencies**: Prepares Python `venv` and installs packages from `requirements.txt` + `flake8` & `pytest`.
+3. **Lint & Code Analysis**: Code style and syntax check via `flake8`.
+4. **Run Unit Tests**: Automated unit testing via `pytest` with JUnit XML result output.
+5. **Build Docker Image**: Constructs `chatbot-app:${BUILD_NUMBER}` Docker image.
+6. **Verification & Cleanup**: Post-build cleanup and JUnit test report publishing.
+
+---
+
 ## 🗺️ Roadmap
 
+- [x] Jenkins CI/CD Declarative Pipeline & Docker containerization
 - [ ] Persistent cloud database — swap SQLite → PostgreSQL via `AsyncPostgresSaver`
 - [ ] Multi-user session isolation with authentication (`st-login` or OAuth)
 - [ ] Image/multimodal input support (native Gemma 4 capability)
