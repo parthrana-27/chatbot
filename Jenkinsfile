@@ -12,7 +12,7 @@ pipeline {
         APP_NAME = 'chatbot-app'
         IMAGE_NAME = 'chatbot-app'
         IMAGE_TAG = "${BUILD_NUMBER}"
-        HUGGINGFACEHUB_API_TOKEN = credentials('HUGGINGFACEHUB_API_TOKEN') // Optional: configured in Jenkins Credentials
+        // HUGGINGFACEHUB_API_TOKEN = credentials('HUGGINGFACEHUB_API_TOKEN') // Optional: configured in Jenkins Credentials
     }
 
     stages {
