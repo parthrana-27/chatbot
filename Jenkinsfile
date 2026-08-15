@@ -77,10 +77,10 @@ pipeline {
                 echo "Stage 5: Building Docker Image..."
                 echo "=========================================="
                 script {
-                    try {
-                        sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -t ${IMAGE_NAME}:latest ."
+                    def status = sh(script: "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -t ${IMAGE_NAME}:latest .", returnStatus: true)
+                    if (status == 0) {
                         echo "Docker image ${IMAGE_NAME}:${IMAGE_TAG} built successfully."
-                    } catch (Exception e) {
+                    } else {
                         echo "WARNING: Docker CLI is not installed or accessible on this agent node. Skipping Docker build stage."
                     }
                 }
@@ -93,9 +93,8 @@ pipeline {
                 echo "Stage 6: Verifying container image setup..."
                 echo "=========================================="
                 script {
-                    try {
-                        sh "docker images | grep ${IMAGE_NAME} || true"
-                    } catch (Exception e) {
+                    def status = sh(script: "docker images | grep ${IMAGE_NAME} || true", returnStatus: true)
+                    if (status != 0) {
                         echo "Skipping container deployment verification."
                     }
                 }
