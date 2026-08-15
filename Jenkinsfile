@@ -77,7 +77,7 @@ pipeline {
                 echo "Stage 5: Building Docker Image..."
                 echo "=========================================="
                 script {
-                    def dockerExists = sh(script: 'command -v docker', returnStatus: true) == 0
+                    def dockerExists = sh(script: 'docker info', returnStatus: true) == 0
                     if (dockerExists) {
                         sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -t ${IMAGE_NAME}:latest ."
                         echo "Docker image ${IMAGE_NAME}:${IMAGE_TAG} built successfully."
@@ -94,7 +94,7 @@ pipeline {
                 echo "Stage 6: Verifying container image setup..."
                 echo "=========================================="
                 script {
-                    def dockerExists = sh(script: 'command -v docker', returnStatus: true) == 0
+                    def dockerExists = sh(script: 'docker info', returnStatus: true) == 0
                     if (dockerExists) {
                         sh "docker images | grep ${IMAGE_NAME} || true"
                     } else {
